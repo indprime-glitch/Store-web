@@ -3,112 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlayStore Lite - Global</title>
+    <title>ApkPro Global</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Roboto', sans-serif; background-color: #fff; }
-        .bottom-nav { border-top: 1px solid #e2e8f0; }
-        .app-icon { box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; }
-        .active-tab { color: #01875f; }
-        .active-tab-indicator { background-color: #e8f0fe; color: #0b57cf; border-radius: 16px; }
-        /* Animasi Spin */
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #01875f; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        .app-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .app-card:hover { transform: scale(1.05); }
+        .loader { border-top-color: #10B981; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
     </style>
 </head>
-<body class="pb-20">
+<body class="bg-[#f0f2f5] min-h-screen">
 
-    <header class="p-4 sticky top-0 bg-white z-40">
-        <div class="flex items-center bg-[#f1f3f4] rounded-full px-4 py-2 gap-3 shadow-sm">
-            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="searchBar" oninput="handleSearch()" placeholder="Telusuri aplikasi & game" class="bg-transparent border-none outline-none flex-1 text-sm">
-            <div id="auth-trigger" onclick="openModal('auth-modal')" class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer">?</div>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto">
-        
-        <div id="home-view">
-            <div class="flex gap-6 px-4 py-2 overflow-x-auto whitespace-nowrap text-sm font-medium border-b border-gray-100">
-                <span class="text-[#01875f] border-b-2 border-[#01875f] pb-2">Untuk Anda</span>
-                <span class="text-gray-600">Paling populer</span>
-                <span class="text-gray-600">Anak-anak</span>
-                <span class="text-gray-600">Kategori</span>
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="showHome()">
+                <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <span class="text-white font-bold text-xl">P</span>
+                </div>
+                <span class="text-xl font-extrabold text-gray-800 hidden sm:block">PlayStore <span class="text-green-600">Lite</span></span>
             </div>
 
-            <section class="p-4">
-                <div class="bg-gradient-to-r from-blue-700 to-indigo-900 rounded-2xl p-6 text-white relative overflow-hidden h-48 flex flex-col justify-end">
-                    <img src="https://via.placeholder.com/400x200/000/fff?text=Banner+Mobile+Legends" class="absolute top-0 left-0 w-full h-full object-cover opacity-50">
-                    <div class="relative z-10">
-                        <p class="text-[10px] font-bold uppercase tracking-wider mb-1">Tips dan trik</p>
-                        <h3 class="text-lg font-bold leading-tight mb-2">Begini cara menyesuaikan hero di Mobile Legends</h3>
-                        <p class="text-xs opacity-90">Buat gameplay-mu lebih seru</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="px-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-bold text-gray-800">Disarankan untuk Anda</h2>
-                    <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"></path></svg>
-                </div>
-
-                <div id="app-grid" class="space-y-6">
-                    <div class="flex items-center justify-center py-20">
-                        <div class="spinner"></div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div id="detail-view" class="hidden min-h-screen bg-white animate-in fade-in duration-300">
-            <div class="p-4 flex items-center gap-4">
-                <button onclick="showHome()" class="p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
+            <div class="flex-1 max-w-md">
+                <input type="text" id="searchBar" oninput="handleSearch()" placeholder="Cari aplikasi global..." class="w-full bg-gray-100 border-none rounded-full px-5 py-2 focus:ring-2 focus:ring-green-500 outline-none transition-all">
             </div>
-            <div id="detail-body" class="px-6"></div>
-        </div>
-    </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white bottom-nav flex justify-around py-3 px-2 z-50">
-        <div onclick="showHome()" class="flex flex-col items-center gap-1 active-tab">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-            <span class="text-[10px] font-medium">Game</span>
-        </div>
-        <div class="flex flex-col items-center gap-1 text-gray-500">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-            <span class="text-[10px] font-medium">Aplikasi</span>
-        </div>
-        <div id="upload-btn-container" class="hidden flex flex-col items-center gap-1 text-gray-500">
-            <button onclick="openModal('upload-modal')" class="bg-[#01875f] text-white p-1 rounded-md">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
-            </button>
-            <span class="text-[10px] font-medium">Upload</span>
+            <div id="nav-actions" class="flex items-center gap-3">
+                <button onclick="openModal('auth-modal')" class="bg-green-600 text-white px-5 py-2 rounded-full font-semibold text-sm">Masuk</button>
+            </div>
         </div>
     </nav>
 
-    <div id="upload-modal" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl">
-            <h2 class="text-xl font-bold mb-4">Upload ke Global</h2>
-            <div class="space-y-4">
-                <input type="text" id="up-name" placeholder="Nama Aplikasi" class="w-full border-b p-2 outline-none focus:border-[#01875f]">
-                <textarea id="up-desc" placeholder="Deskripsi Singkat" class="w-full border-b p-2 outline-none focus:border-[#01875f]"></textarea>
-                <div class="bg-gray-50 p-4 rounded-xl border border-dashed border-gray-300">
-                    <p class="text-xs text-gray-500 mb-2 font-bold">PILIH FILE APK</p>
-                    <input type="file" id="up-file" accept=".apk" class="text-sm">
+    <main class="max-w-6xl mx-auto p-6">
+        <div id="home-view">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Koleksi Aplikasi Global</h2>
+                <span id="user-welcome" class="text-sm text-gray-500 font-medium"></span>
+            </div>
+            <div id="app-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 text-center">
                 </div>
-                <input type="text" id="up-icon" placeholder="URL Ikon (Contoh: https://...png)" class="w-full border-b p-2 outline-none text-sm">
+        </div>
+
+        <div id="detail-view" class="hidden">
+            <button onclick="showHome()" class="mb-6 text-green-600 font-bold flex items-center gap-2">← Kembali ke Beranda</button>
+            <div id="detail-body"></div>
+        </div>
+    </main>
+
+    <div id="upload-modal" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+            <h2 class="text-2xl font-bold mb-6 text-center">Upload APK Baru</h2>
+            <div class="space-y-4">
+                <input type="text" id="up-name" placeholder="Nama Aplikasi" class="w-full border p-4 rounded-2xl outline-none focus:ring-2 focus:ring-green-500">
+                <textarea id="up-desc" placeholder="Deskripsi Singkat" class="w-full border p-4 rounded-2xl h-24 outline-none focus:ring-2 focus:ring-green-500"></textarea>
                 
-                <div id="prog-container" class="hidden">
-                    <div class="w-full bg-gray-200 rounded-full h-1.5">
-                        <div id="prog-bar" class="bg-[#01875f] h-1.5 rounded-full transition-all" style="width: 0%"></div>
-                    </div>
-                    <p id="prog-status" class="text-[10px] text-center mt-1 text-[#01875f]">Mengunggah...</p>
+                <div class="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50">
+                    <label class="text-xs font-bold text-gray-400 uppercase block mb-2 text-center">Pilih File APK Dari HP</label>
+                    <input type="file" id="up-file" accept=".apk" class="w-full text-sm">
                 </div>
 
-                <button onclick="uploadAppGlobal()" id="btnPublish" class="w-full bg-[#01875f] text-white py-3 rounded-lg font-bold shadow-md">Publikasikan</button>
-                <button onclick="closeModal('upload-modal')" class="w-full text-gray-400 text-sm py-2">Batal</button>
+                <input type="text" id="up-icon" placeholder="URL Ikon (Contoh: https://...png)" class="w-full border p-4 rounded-2xl outline-none focus:ring-2 focus:ring-green-500 text-sm">
+
+                <div id="prog-container" class="hidden space-y-2">
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div id="prog-bar" class="bg-green-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p id="prog-status" class="text-[10px] text-center text-green-600 font-bold uppercase">Sedang Mengirim: 0%</p>
+                </div>
+
+                <button onclick="uploadAppGlobal()" id="btnPublish" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:bg-green-700 disabled:bg-gray-400">Publikasikan Aplikasi</button>
+                <button onclick="closeModal('upload-modal')" class="w-full text-gray-400 text-sm">Batalkan</button>
             </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl text-center">
+            <h2 class="text-2xl font-bold mb-6">Masuk Akun</h2>
+            <input type="text" id="user-name" placeholder="Nama Anda" class="w-full border p-3 rounded-xl mb-3 text-center outline-none focus:ring-2 focus:ring-green-500">
+            <button onclick="handleLogin()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold shadow-lg">Lanjutkan</button>
+            <button onclick="closeModal('auth-modal')" class="w-full mt-4 text-gray-400">Tutup</button>
         </div>
     </div>
 
@@ -119,12 +94,12 @@
     <script>
         // --- CONFIG FIREBASE ---
         const firebaseConfig = {
-            apiKey: "ISI_API_KEY_KAMU",
-            authDomain: "PROJECT_ID.firebaseapp.com",
-            projectId: "PROJECT_ID",
-            storageBucket: "PROJECT_ID.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
+            apiKey: "ISI_PUNYAMU",
+            authDomain: "ISI_PUNYAMU",
+            projectId: "ISI_PUNYAMU",
+            storageBucket: "ISI_PUNYAMU",
+            messagingSenderId: "ISI_PUNYAMU",
+            appId: "ISI_PUNYAMU"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -134,7 +109,7 @@
         let apps = [];
         let currentUser = JSON.parse(localStorage.getItem('sessionUser')) || null;
 
-        // LOAD DATA GLOBAL
+        // Ambil Data Secara Global
         function loadGlobalApps() {
             db.collection("apps").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
                 apps = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -142,89 +117,34 @@
             });
         }
 
-        // Render ala PlayStore (List Mendatar)
         function renderApps(data) {
             const grid = document.getElementById('app-grid');
+            if(data.length === 0) {
+                grid.innerHTML = `<p class="col-span-full py-20 text-gray-400">Belum ada aplikasi global...</p>`;
+                return;
+            }
             grid.innerHTML = data.map(app => `
-                <div onclick="showDetail('${app.id}')" class="flex items-center gap-4 cursor-pointer active:bg-gray-50 rounded-xl p-1">
-                    <img src="${app.icon}" class="w-16 h-16 rounded-[1.2rem] app-icon object-cover" onerror="this.src='https://via.placeholder.com/100?text=APK'">
-                    <div class="flex-1 border-b border-gray-100 pb-4">
-                        <h3 class="text-sm font-medium text-gray-900 mb-0.5">${app.name}</h3>
-                        <p class="text-xs text-gray-500 mb-1">${app.dev || 'Developer Global'}</p>
-                        <div class="flex items-center gap-2 text-[11px] text-gray-500">
-                            <span>4,${Math.floor(Math.random() * 9)} ★</span>
-                            <span>${Math.floor(Math.random() * 100)} MB</span>
-                        </div>
-                    </div>
+                <div onclick="showDetail('${app.id}')" class="app-card bg-white p-4 rounded-[2rem] shadow-sm border border-gray-100 cursor-pointer flex flex-col items-center">
+                    <img src="${app.icon}" class="w-20 h-20 rounded-2xl mb-3 shadow-md object-cover" onerror="this.src='https://via.placeholder.com/100?text=APK'">
+                    <h3 class="font-bold text-gray-800 text-sm truncate w-full">${app.name}</h3>
+                    <p class="text-[10px] text-green-600 font-bold uppercase mt-1">✓ Global</p>
                 </div>
             `).join('');
         }
 
-        // FUNGSI DETAIL (Layout PlayStore Asli)
-        function showDetail(id) {
-            const app = apps.find(a => a.id === id);
-            document.getElementById('home-view').classList.add('hidden');
-            document.getElementById('detail-view').classList.remove('hidden');
-            window.scrollTo(0,0);
-
-            document.getElementById('detail-body').innerHTML = `
-                <div class="flex gap-5 items-start mb-6">
-                    <img src="${app.icon}" class="w-20 h-20 rounded-[1.5rem] shadow-md object-cover">
-                    <div class="flex-1">
-                        <h1 class="text-2xl font-bold text-gray-900 leading-tight">${app.name}</h1>
-                        <p class="text-[#01875f] font-medium text-sm">${app.dev}</p>
-                        <p class="text-xs text-gray-500 mt-1">Berisi iklan · Pembelian dalam aplikasi</p>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center text-center border-b border-t py-3 border-gray-100 mb-6">
-                    <div><p class="text-sm font-bold text-gray-800">4,8 ★</p><p class="text-[10px] text-gray-500">1 jt ulasan</p></div>
-                    <div class="w-px h-6 bg-gray-200"></div>
-                    <div><p class="text-sm font-bold text-gray-800">50 jt+</p><p class="text-[10px] text-gray-500">Download</p></div>
-                    <div class="w-px h-6 bg-gray-200"></div>
-                    <div><p class="text-sm font-bold text-gray-800">PEGI 3</p><p class="text-[10px] text-gray-500">Rating</p></div>
-                </div>
-
-                <button onclick="startDownload('${app.link}')" id="dlBtn" class="w-full bg-[#01875f] text-white py-2.5 rounded-lg font-bold text-sm mb-8">Instal</button>
-
-                <div class="mb-10">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-gray-800">Tentang aplikasi ini</h3>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"></path></svg>
-                    </div>
-                    <p class="text-sm text-gray-600 leading-relaxed">${app.desc || 'Tidak ada deskripsi tambahan untuk aplikasi global ini.'}</p>
-                </div>
-            `;
-        }
-
-        // FUNGSI DOWNLOAD
-        function startDownload(link) {
-            const btn = document.getElementById('dlBtn');
-            btn.innerHTML = "Menunggu...";
-            btn.classList.replace('bg-[#01875f]', 'bg-gray-400');
-            
-            setTimeout(() => {
-                btn.innerHTML = "Mengunduh...";
-                window.open(link, '_blank');
-                setTimeout(() => {
-                    btn.innerHTML = "Instal";
-                    btn.classList.replace('bg-gray-400', 'bg-[#01875f]');
-                }, 3000);
-            }, 1500);
-        }
-
-        // FUNGSI UPLOAD GLOBAL
+        // Fungsi Upload APK (Anti-Macet)
         async function uploadAppGlobal() {
             const name = document.getElementById('up-name').value;
             const fileInput = document.getElementById('up-file');
             const file = fileInput.files[0];
             const icon = document.getElementById('up-icon').value || 'https://via.placeholder.com/150';
 
-            if(!name || !file) return alert("Lengkapi data!");
+            if(!name || !file) return alert("Pilih file APK dan isi nama dulu!");
 
             const btn = document.getElementById('btnPublish');
             const progCont = document.getElementById('prog-container');
             const progBar = document.getElementById('prog-bar');
+            const progStatus = document.getElementById('prog-status');
 
             btn.disabled = true;
             progCont.classList.remove('hidden');
@@ -234,63 +154,92 @@
                 const uploadTask = storageRef.put(file);
 
                 uploadTask.on('state_changed', 
-                    (s) => {
-                        const p = (s.bytesTransferred / s.totalBytes) * 100;
-                        progBar.style.width = p + '%';
-                        document.getElementById('prog-status').innerText = `Mengunggah: ${Math.round(p)}%`;
+                    (snap) => {
+                        const percent = (snap.bytesTransferred / snap.totalBytes) * 100;
+                        progBar.style.width = percent + '%';
+                        progStatus.innerText = "Mengunggah: " + Math.round(percent) + "%";
                     }, 
-                    (e) => { alert("Gagal!"); btn.disabled = false; },
+                    (err) => { alert("Gagal! Cek koneksi."); btn.disabled = false; },
                     async () => {
-                        const url = await uploadTask.snapshot.ref.getDownloadURL();
+                        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
                         await db.collection("apps").add({
                             name: name,
                             desc: document.getElementById('up-desc').value,
                             icon: icon,
-                            link: url,
+                            link: downloadURL,
                             dev: currentUser.name,
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
                         });
-                        alert("Selesai!");
+                        alert("Selesai! Aplikasi Anda sudah Online.");
                         location.reload();
                     }
                 );
             } catch (e) { btn.disabled = false; }
         }
 
-        // UI HELPERS
-        function showHome() {
-            document.getElementById('home-view').classList.remove('hidden');
-            document.getElementById('detail-view').classList.add('hidden');
+        function showDetail(id) {
+            const app = apps.find(a => a.id === id);
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('detail-view').classList.remove('hidden');
+            
+            document.getElementById('detail-body').innerHTML = `
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100">
+                    <div class="flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
+                        <img src="${app.icon}" class="w-40 h-40 rounded-[2.5rem] shadow-xl object-cover">
+                        <div class="flex-1">
+                            <h1 class="text-4xl font-black text-gray-900">${app.name}</h1>
+                            <p class="text-green-600 font-bold text-lg">Developer: ${app.dev}</p>
+                            <button onclick="window.open('${app.link}', '_blank')" class="w-full md:w-auto mt-8 bg-green-600 text-white px-12 py-4 rounded-2xl font-bold text-xl shadow-lg hover:bg-green-700 transition-all">
+                                Download APK (Global)
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-12 pt-8 border-t border-gray-100">
+                        <h3 class="text-xl font-bold mb-4">Deskripsi</h3>
+                        <p class="text-gray-600 leading-relaxed">${app.desc || 'Tidak ada deskripsi.'}</p>
+                    </div>
+                </div>
+            `;
         }
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-        // AUTH SIMULASI
+        // System
         function handleLogin() {
-            const n = document.getElementById('user-name').value;
-            if(n) {
-                currentUser = { name: n };
+            const name = document.getElementById('user-name').value;
+            if(name) {
+                currentUser = { name: name };
                 localStorage.setItem('sessionUser', JSON.stringify(currentUser));
                 location.reload();
             }
         }
 
+        function handleLogout() {
+            localStorage.removeItem('sessionUser');
+            location.reload();
+        }
+
+        function handleSearch() {
+            const q = document.getElementById('searchBar').value.toLowerCase();
+            renderApps(apps.filter(a => a.name.toLowerCase().includes(q)));
+        }
+
+        function showHome() {
+            document.getElementById('home-view').classList.remove('hidden');
+            document.getElementById('detail-view').classList.add('hidden');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
         window.onload = () => {
             if(currentUser) {
-                document.getElementById('auth-trigger').innerText = currentUser.name[0].toUpperCase();
-                document.getElementById('upload-btn-container').classList.remove('hidden');
+                document.getElementById('nav-actions').innerHTML = `
+                    <button onclick="openModal('upload-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-md">+ Upload Global</button>
+                    <button onclick="handleLogout()" class="text-red-500 font-bold text-xs ml-2">Keluar</button>
+                `;
+                document.getElementById('user-welcome').innerText = `Halo, ${currentUser.name}!`;
             }
             loadGlobalApps();
         };
     </script>
-
-    <div id="auth-modal" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 text-center">
-            <h2 class="font-bold text-xl mb-4">Masuk</h2>
-            <input type="text" id="user-name" placeholder="Nama Anda" class="w-full border p-2 rounded-lg mb-4 outline-none focus:border-[#01875f]">
-            <button onclick="handleLogin()" class="w-full bg-[#01875f] text-white py-2 rounded-lg font-bold">Lanjutkan</button>
-        </div>
-    </div>
-
 </body>
-</html>
+    </html>
